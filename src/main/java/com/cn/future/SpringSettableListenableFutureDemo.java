@@ -4,6 +4,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.util.concurrent.SettableListenableFuture;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @Description org.springframework.util.concurrent.SettableListenableFuture
@@ -31,8 +32,27 @@ public class SpringSettableListenableFutureDemo {
         Thread thread = new Thread(()->{
             //触发回调
             settableListenableFuture.set("aaa");
+            try {
+                System.out.println(settableListenableFuture.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         });
+
         thread.start();
+        new Thread(()->{
+            //触发回调
+            settableListenableFuture.set("bbb");
+            try {
+                System.out.println(settableListenableFuture.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         System.in.read();
     }
